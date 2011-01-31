@@ -32,4 +32,7 @@ WHERE
   ctu.constraint_name = tc.constraint_name AND
   (tc.table_name = '%s' OR ctu.table_name = '%s')
 
+
+examine tc.table_schema for the schema
+
 -}

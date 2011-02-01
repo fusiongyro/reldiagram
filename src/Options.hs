@@ -75,13 +75,13 @@ tableOption  t opts = return $ opts { tablesToExamine = tablesToExamine opts ++ 
 schemaOption n opts = return $ opts { schemas = schemas opts ++ [n] }
 
 optionsToConnectionString :: Options -> String
-optionsToConnectionString opts = undefined
+optionsToConnectionString = undefined
 
 parseOptions :: [String] -> IO Options
 parseOptions args = do
   options <- flags
   case getOpt RequireOrder options args of
-    (opts, args,   []) -> foldl (>>=) defaultOptions opts
+    (opts, args',   []) -> foldl (>>=) defaultOptions opts
     (   _,    _, errs) -> putStrLn "error" >> exitFailure >> defaultOptions
 
 exceptIO :: (MonadPlus m) => IO a -> IO (m a)

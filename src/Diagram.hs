@@ -1,7 +1,6 @@
 module Diagram where
 
-import Database.HDBC
-import Database.HDBC.PostgreSQL
+import Types
 
 {-
 

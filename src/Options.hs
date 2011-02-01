@@ -13,6 +13,8 @@ import System
 import System.Console.GetOpt
 import System.Posix.User
 
+import Text.Printf
+
 {-
 args: databases. if no databases are specified, then the PGDATABASE environment variable is used.
 -}
@@ -74,8 +76,9 @@ userOption   u opts = return $ opts { dbUsername = u }
 tableOption  t opts = return $ opts { tablesToExamine = tablesToExamine opts ++ [t] }
 schemaOption n opts = return $ opts { schemas = schemas opts ++ [n] }
 
-optionsToConnectionString :: Options -> String
-optionsToConnectionString = undefined
+optionsToConnectionString :: Options -> String -> String
+optionsToConnectionString (Options { dbHost = host, dbPort = port, dbUsername = user, dbPassword = password }) db =
+    printf "host=%s port=%d user=%s password=%s dbname=%s" host port user password db
 
 parseOptions :: [String] -> IO Options
 parseOptions args = do

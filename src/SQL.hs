@@ -7,6 +7,7 @@ import Data.Maybe
 
 import Database.HDBC
 import Database.HDBC.PostgreSQL
+import Data.Encoding
 
 import Types
 
@@ -24,6 +25,7 @@ allRelationsSQL = "SELECT \n" ++
 queryDB :: Connection -> IO [TableLink]
 queryDB db = mapMaybe parseRow <$> quickQuery db allRelationsSQL []
     where
-        parseRow [SqlByteString owner, SqlByteString destination] = Just $ owner `References` destination
+        parseRow [SqlByteString owner, SqlByteString destination] = 
+            Just $ (decode UTF8 owner) `References` (decode UTF8 destination)
         parseRow _ = Nothing
 

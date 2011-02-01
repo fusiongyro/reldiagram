@@ -84,14 +84,25 @@ parseOptions :: [String] -> IO Options
 parseOptions args = do
   options <- flags
   case getOpt RequireOrder options args of
-    (opts, args',   []) -> foldl (>>=) defaultOptions opts
-    (   _,    _, errs) -> putStrLn "error" >> exitFailure >> defaultOptions
+    (opts, args',   []) -> foldl (>>=) defaultOptions opts >>= addArgs args' >>= postParsing
+    (   _,     _, errs) -> putStrLn (concat errs) >> exitFailure >> defaultOptions
+
+addArgs :: [String] -> Options -> IO Options
+addArgs args opts = return opts { databasesToExamine = args }
+
+postParsing :: Options -> IO Options
+postParsing opts@(Options {databasesToExamine = []}) = do
+    env <- exceptIO (getEnv "PGDATABASE")
+    maybe failWithoutDatabase (\db -> return opts { databasesToExamine = [db] }) env
+        where
+            failWithoutDatabase = putStrLn "Error: no databases to connect to!" >> exitFailure >> return opts
+postParsing opts = return opts
 
 exceptIO :: (MonadPlus m) => IO a -> IO (m a)
 exceptIO f = either (const mzero) (mplus mzero . return) <$> tryIO f
 
-getEnvM :: (MonadPlus m) => String -> IO (m String)
-getEnvM s = either (const mzero) (mplus mzero . return) <$> tryIO (getEnv s)
+--getEnvM :: (MonadPlus m) => String -> IO (m String)
+--getEnvM s = either (const mzero) (mplus mzero . return) <$> tryIO (getEnv s)
 
 tryIO :: IO a -> IO (Either IOException a)
 tryIO = try

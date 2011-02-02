@@ -77,8 +77,8 @@ tableOption  t opts = return $ opts { tablesToExamine = tablesToExamine opts ++ 
 schemaOption n opts = return $ opts { schemas = schemas opts ++ [n] }
 
 optionsToConnectionString :: Options -> String -> String
-optionsToConnectionString (Options { dbHost = host, dbPort = port, dbUsername = user, dbPassword = password }) db =
-    printf "host=%s port=%d user=%s password=%s dbname=%s" host port user password db
+optionsToConnectionString (Options { dbHost = host, dbPort = port, dbUsername = user, dbPassword = password }) =
+    printf "host=%s port=%d user=%s password=%s dbname=%s" host port user password
 
 parseOptions :: [String] -> IO Options
 parseOptions args = do

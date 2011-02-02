@@ -1,13 +1,12 @@
 module Database where
 
 import Control.Applicative
-import Control.Monad
-import Data.ByteString
+import Control.Exception
 import Data.Maybe
+import System.IO
 
 import Database.HDBC
 import Database.HDBC.PostgreSQL
-import Data.ByteString.UTF8
 
 import Types
 
@@ -25,8 +24,7 @@ allRelationsSQL = "SELECT \n" ++
 allLinks :: Connection -> IO [TableLink]
 allLinks db = mapMaybe parseRow <$> quickQuery db allRelationsSQL []
     where
-        parseRow [SqlByteString owner, SqlByteString destination] = 
-            Just $ toString owner `References` toString destination
+        parseRow [owner, destination] = Just $ fromSql owner `References` fromSql destination
         parseRow _ = Nothing
 
 

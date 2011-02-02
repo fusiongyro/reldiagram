@@ -17,7 +17,7 @@ Cabal-version:       >=1.2
 Executable pg-rel-diagrams
   Main-is: src/Main.hs
   --Build-depends: src/Options.hs src/Diagram.hs src/Types.hs src/SQL.hs
-  Build-depends: utf8-string < 0.4
+  -- Build-depends: utf8-string < 0.4
   -- Modules not exported by this package.
   -- Other-modules:       
   

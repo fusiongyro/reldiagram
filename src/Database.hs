@@ -1,9 +1,7 @@
-module Database where
+module Database (getRelationsForConnection) where
 
 import Control.Applicative
-import Control.Exception
 import Data.Maybe
-import System.IO
 
 import Database.HDBC
 import Database.HDBC.PostgreSQL
@@ -22,7 +20,10 @@ allRelationsSQL = "SELECT \n" ++
                     "  ctu.constraint_name = tc.constraint_name"
 
 allLinks :: Connection -> IO [TableLink]
-allLinks db = mapMaybe parseRow <$> quickQuery db allRelationsSQL []
+allLinks db = mapMaybe parseRow <$> quickQuery' db allRelationsSQL []
     where
         parseRow [owner, destination] = Just $ fromSql owner `References` fromSql destination
         parseRow _ = Nothing
+
+getRelationsForConnection :: String -> IO [TableLink]
+getRelationsForConnection = flip withPostgreSQL allLinks

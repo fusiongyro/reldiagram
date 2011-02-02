@@ -1,12 +1,11 @@
-module Options ( Options(..)
-               , parseOptions
-               , optionsToConnectionString
+module Options ( getConnectionStrings
                ) where
 
+import Control.Monad
+import Data.Maybe
 import System
 import System.Console.GetOpt
-import System.Posix.User
-
+import System.Posix.User (getEffectiveUserName)
 import Text.Printf
 
 import Control.Monad.Utils
@@ -69,9 +68,15 @@ userOption   u opts  = return $ opts { dbUsername = u }
 tableOption  t opts  = return $ opts { tablesToExamine = tablesToExamine opts ++ [t] }
 schemaOption n opts  = return $ opts { schemas = schemas opts ++ [n] }
 
-optionsToConnectionString :: Options -> String -> String
-optionsToConnectionString (Options { dbHost = host, dbPort = port, dbUsername = user, dbPassword = password }) =
-    printf "host=%s port=%d user=%s password=%s dbname=%s" host port user password
+optionsToConnectionStrings :: Options -> [String]
+optionsToConnectionStrings (Options { dbHost = host
+                                    , dbPort = port
+                                    , dbUsername = user
+                                    , dbPassword = password
+                                    , databasesToExamine = dbs }) =
+    map render dbs
+        where
+            render = printf "host=%s port=%d user=%s password=%s dbname=%s" host port user password
 
 parseOptions :: [String] -> IO Options
 parseOptions args = do
@@ -86,7 +91,12 @@ addArgs args opts = return opts { databasesToExamine = args }
 postParsing :: Options -> IO Options
 postParsing opts@(Options {databasesToExamine = []}) = do
     env <- exceptIO (getEnv "PGDATABASE")
-    maybe failWithoutDatabase (\db -> return opts { databasesToExamine = [db] }) env
-        where
-            failWithoutDatabase = putStrLn "Error: no databases to connect to!" >> exitFailure >> return opts
+    userName <- getEffectiveUserName
+    return opts { databasesToExamine = [fromJust $ env `mplus` Just userName]}
 postParsing opts = return opts
+
+getConnectionStrings :: IO [String]
+getConnectionStrings = do
+    args <- getArgs
+    options <- parseOptions args
+    return $ optionsToConnectionStrings options

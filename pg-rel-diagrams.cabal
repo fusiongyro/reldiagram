@@ -14,6 +14,7 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 Executable reldiagram
-  Main-is: src/Main.hs
-  Build-depends: base >= 3 && < 5
+  Main-Is: Main.hs
+  Build-depends: base >= 3 && < 5, unix >= 2.0 && < 3.0, haskell98, HDBC-postgresql >= 2.2 && < 3, HDBC >= 2.2 && < 3
   ghc-options:       -Wall
+  HS-Source-Dirs:       src/

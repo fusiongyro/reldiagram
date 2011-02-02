@@ -7,7 +7,7 @@ import Data.Maybe
 
 import Database.HDBC
 import Database.HDBC.PostgreSQL
-import Data.Encoding
+import Data.ByteString.UTF8
 
 import Types
 
@@ -22,11 +22,11 @@ allRelationsSQL = "SELECT \n" ++
                     "  constraint_type = 'FOREIGN KEY' AND\n" ++ 
                     "  ctu.constraint_name = tc.constraint_name"
 
-queryDB :: Connection -> IO [TableLink]
-queryDB db = mapMaybe parseRow <$> quickQuery db allRelationsSQL []
+allLinks :: Connection -> IO [TableLink]
+allLinks db = mapMaybe parseRow <$> quickQuery db allRelationsSQL []
     where
         parseRow [SqlByteString owner, SqlByteString destination] = 
-            Just $ (decode UTF8 owner) `References` (decode UTF8 destination)
+            Just $ toString owner `References` toString destination
         parseRow _ = Nothing
 
 

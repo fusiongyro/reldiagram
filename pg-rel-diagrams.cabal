@@ -1,7 +1,7 @@
-Name:                pg-rel-diagrams
+Name:                reldiagram
 Version:             0.1
-Synopsis:            Examines a PostgreSQL database and produces Graphviz diagrams for the foreign key relationships between tables.
--- Description:         
+Synopsis:            Diagrams foreign key relationships in PostgreSQL, produces Graphviz output.
+Description:         Examines foreign key constraints between PostgreSQL tables and produces Graphviz graphs for rendering.
 Homepage:            http://bitbucket.org/fusiongyro/reldiagram
 License:             BSD3
 License-file:        LICENSE
@@ -10,16 +10,10 @@ Maintainer:          fusion@storytotell.org
 Copyright:           2011 Daniel Lyons
 Category:            Database
 Build-type:          Simple
--- Extra-source-files:  
 Cabal-version:       >=1.2
 
 
-Executable pg-rel-diagrams
+Executable reldiagram
   Main-is: src/Main.hs
-  --Build-depends: src/Options.hs src/Diagram.hs src/Types.hs src/SQL.hs
-  -- Build-depends: utf8-string < 0.4
-  -- Modules not exported by this package.
-  -- Other-modules:       
-  
-  -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
-  -- Build-tools:         
+  Build-depends: base >= 3 && < 5
+  ghc-options:       -Wall

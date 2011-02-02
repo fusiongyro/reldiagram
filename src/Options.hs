@@ -1,13 +1,7 @@
-{-# LANGUAGE PatternGuards #-}
-
 module Options ( Options(..)
                , parseOptions
                , optionsToConnectionString
                ) where
-
-import Control.Applicative
-import Control.Monad
-import Control.Exception
 
 import System
 import System.Console.GetOpt
@@ -15,18 +9,17 @@ import System.Posix.User
 
 import Text.Printf
 
-{-
-args: databases. if no databases are specified, then the PGDATABASE environment variable is used.
--}
+import Control.Monad.Utils
+import Control.Exception.Utils
 
 data Options = Options {
-                 dbHost                   :: String
-               , dbPort                   :: Integer
-               , dbUsername               :: String
-               , dbPassword               :: String
-               , tablesToExamine          :: [String]
-               , schemas                  :: [String]
-               , databasesToExamine       :: [String]
+                 dbHost                   :: String   -- the host to connect to
+               , dbPort                   :: Integer  -- the port on the host to connect to
+               , dbUsername               :: String   -- the username of this user to auth with
+               , dbPassword               :: String   -- the password for this user
+               , tablesToExamine          :: [String] -- the list of tables to examine
+               , schemas                  :: [String] -- the list of schemas to examine
+               , databasesToExamine       :: [String] -- the list of databases to examine
                } deriving (Show)
 
 defaultOptions :: IO Options
@@ -97,18 +90,3 @@ postParsing opts@(Options {databasesToExamine = []}) = do
         where
             failWithoutDatabase = putStrLn "Error: no databases to connect to!" >> exitFailure >> return opts
 postParsing opts = return opts
-
-exceptIO :: (MonadPlus m) => IO a -> IO (m a)
-exceptIO f = either (const mzero) (mplus mzero . return) <$> tryIO f
-
---getEnvM :: (MonadPlus m) => String -> IO (m String)
---getEnvM s = either (const mzero) (mplus mzero . return) <$> tryIO (getEnv s)
-
-tryIO :: IO a -> IO (Either IOException a)
-tryIO = try
-
-readM :: (Monad m, Read a) => String -> m a
-readM s | [x] <- parse = return x
-        | otherwise    = fail $ "Failed to parse \"" ++ s ++ "\" as a number."
-  where
-    parse = [x | (x,[]) <- reads s]

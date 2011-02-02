@@ -3,6 +3,7 @@ Version:             0.1
 Synopsis:            Diagrams foreign key relationships in PostgreSQL, produces Graphviz output.
 Description:         Examines foreign key constraints between PostgreSQL tables and produces Graphviz graphs for rendering.
 Homepage:            http://bitbucket.org/fusiongyro/reldiagram
+Bug-Reports:       https://bitbucket.org/fusiongyro/reldiagram/issues?status=new&status=open
 License:             BSD3
 License-file:        LICENSE
 Author:              Daniel Lyons
@@ -11,7 +12,6 @@ Copyright:           2011 Daniel Lyons
 Category:            Database
 Build-type:          Simple
 Cabal-version:       >=1.2
-
 
 Executable reldiagram
   Main-is: src/Main.hs

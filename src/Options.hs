@@ -72,9 +72,9 @@ portOption   p opts = maybe failParse parsePort (readM p)
         _ <- exitFailure
         return opts
       parsePort port = return $ opts { dbPort = port }
-userOption   u opts = return $ opts { dbUsername = u }
-tableOption  t opts = return $ opts { tablesToExamine = tablesToExamine opts ++ [t] }
-schemaOption n opts = return $ opts { schemas = schemas opts ++ [n] }
+userOption   u opts  = return $ opts { dbUsername = u }
+tableOption  t opts  = return $ opts { tablesToExamine = tablesToExamine opts ++ [t] }
+schemaOption n opts  = return $ opts { schemas = schemas opts ++ [n] }
 
 optionsToConnectionString :: Options -> String -> String
 optionsToConnectionString (Options { dbHost = host, dbPort = port, dbUsername = user, dbPassword = password }) db =

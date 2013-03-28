@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+                   "http://www.oasis-open.org/docbook/xml/5.0/dtd/docbook.dtd">
+<chapter>
+  <title>Main</title>
+
+  <simpara>This module defines the main function and is the primary entry point of the program.</simpara>
+
+  <programlisting role="source">module Main where
+
+</programlisting>
+
+  <simpara>The main module depends on the database, diagram and options modules. Each of these modules has a small, well-defined role, and the point of the main program is to glue them together.</simpara>
+
+  <programlisting role="source">import Database
+import Diagram
+import Options
+
+</programlisting>
+
+  <simpara>The main function itself is simply an I/O action.</simpara>
+  <programlisting role="source">main :: IO ()
+main = do
+</programlisting>
+
+  <simpara>First, we get the database connection strings from the command line and environment.</simpara>
+
+  <programlisting role="source">    connections &lt;- getConnectionStrings
+</programlisting>
+
+  <simpara>Then we produce a graph for each of these connections.</simpara>
+
+  <programlisting role="source">    graphs &lt;- mapM getRelationsForConnection connections
+</programlisting>
+
+  <simpara>Finally, we take each of these graphs and write them out in turn to the filesystem.</simpara>
+
+  <programlisting role="source">    mapM_ writeGraph graphs
+</programlisting>
+</chapter>
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+                   "http://www.oasis-open.org/docbook/xml/5.0/dtd/docbook.dtd">
+<chapter>
+  <title>Types</title>
+  <simpara>We define a single module to hold all the application's types, because there is only one.</simpara>
+  <programlisting role="source">module Types(TableLink(..)) where
+
+</programlisting>
+
+  <simpara>This program is so simple there is only one type, <type>References</type>:</simpara>
+
+  <programlisting role="source">data TableLink = String `References` String
+    deriving (Show)
+</programlisting>
+
+  <simpara>This type captures the idea that two tables are related. The
+  table named on the left is the origin, and it contains some kind of
+  foreign key column referencing the table named on the right.</simpara>
+</chapter>
+

@@ -15,6 +15,6 @@ Cabal-version:       >=1.2
 
 Executable reldiagram
   Main-Is: Main.hs
-  Build-depends: base >= 3 && < 5, unix >= 2.0 && < 3.0, haskell98, HDBC-postgresql >= 2.2 && < 3, HDBC >= 2.2 && < 3
+  Build-depends: base >= 3 && < 5, unix >= 2.0 && < 3.0, HDBC-postgresql >= 2.2 && < 3, HDBC >= 2.2 && < 3
   ghc-options:       -Wall
   HS-Source-Dirs:       src/

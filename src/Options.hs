@@ -3,7 +3,8 @@ module Options ( getConnectionStrings
 
 import Control.Monad
 import Data.Maybe
-import System
+import System.Environment
+import System.Exit
 import System.Console.GetOpt
 import System.Posix.User (getEffectiveUserName)
 import Text.Printf
@@ -76,7 +77,7 @@ optionsToConnectionStrings (Options { dbHost = host
                                     , databasesToExamine = dbs }) =
     map render dbs
         where
-            render = printf "host=%s port=%d user=%s password=%s dbname=%s" host port user password
+            render = printf "host=%s port=%d user=%s password='%s' dbname=%s" host port user password
 
 parseOptions :: [String] -> IO Options
 parseOptions args = do

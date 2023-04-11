@@ -1,6 +1,5 @@
 module Database (getRelationsForConnection) where
 
-import Control.Applicative
 import Data.Maybe
 
 import Database.HDBC
